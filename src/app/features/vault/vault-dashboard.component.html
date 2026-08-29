@@ -1,0 +1,185 @@
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Cipher OTP home">
+    <span class="brand-mark" aria-hidden="true">C</span>
+    <span>Cipher OTP</span>
+  </a>
+  <div class="topbar-actions">
+    <span class="local-badge"><span aria-hidden="true"></span> Local vault</span>
+    <button class="button ghost" type="button" (click)="lock()">Lock</button>
+  </div>
+</header>
+
+<main class="page-shell">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Encrypted in this browser</p>
+      <h1>Your one-time codes</h1>
+      <p>Standards-based TOTP and HOTP generation backed by an AES-GCM encrypted vault.</p>
+    </div>
+    <div class="account-count">
+      <strong>{{ cards.length }}</strong>
+      <span>{{ cards.length === 1 ? 'account' : 'accounts' }}</span>
+    </div>
+  </section>
+
+  @if (notice) {
+    <p class="message notice" role="status">{{ notice }}</p>
+  }
+  @if (error) {
+    <p class="message error" role="alert">{{ error }}</p>
+  }
+
+  <div class="workspace-grid">
+    <section class="codes-column" aria-labelledby="codes-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Live generation</p>
+          <h2 id="codes-title">Accounts</h2>
+        </div>
+        <span class="standard-label">RFC 4226 · RFC 6238</span>
+      </div>
+
+      @if (cards.length === 0) {
+        <div class="empty-state">
+          <h3>No accounts yet</h3>
+          <p>Import an otpauth URI, scan a QR code or enter an account manually.</p>
+        </div>
+      }
+
+      <div class="code-list">
+        <article class="code-card" *ngFor="let card of cards; trackBy: trackAccount">
+          <div class="code-card-heading">
+            <div>
+              <span class="kind-badge">{{ card.account.kind | uppercase }}</span>
+              <h3>{{ card.account.issuer }}</h3>
+              <p>{{ card.account.accountName }}</p>
+            </div>
+            <button class="icon-button danger-text" type="button" title="Delete account"
+              (click)="deleteAccount(card.account)" aria-label="Delete account">×</button>
+          </div>
+
+          <button class="code-value" type="button" (click)="copyCode(card)" title="Copy code">
+            {{ card.code }}
+          </button>
+
+          @if (card.account.kind === 'totp') {
+            <div class="timer-row">
+              <div class="progress-track" aria-hidden="true">
+                <span [style.width.%]="card.progress"></span>
+              </div>
+              <span>{{ card.remainingSeconds }}s</span>
+            </div>
+          } @else {
+            <div class="hotp-row">
+              <span>Counter {{ card.account.counter }}</span>
+              <button class="button small" type="button" (click)="advanceHotp(card.account)">Next code</button>
+            </div>
+          }
+
+          <p class="code-meta">{{ card.account.algorithm }} · {{ card.account.digits }} digits</p>
+        </article>
+      </div>
+    </section>
+
+    <aside class="tools-column">
+      <section class="panel" aria-labelledby="import-title">
+        <p class="eyebrow">Add an account</p>
+        <h2 id="import-title">Import or enter</h2>
+
+        <label for="otpauth-uri">otpauth:// URI</label>
+        <div class="inline-field">
+          <input id="otpauth-uri" name="importUri" type="text" [(ngModel)]="importUri"
+            placeholder="otpauth://totp/…">
+          <button class="button" type="button" (click)="parseUri()">Parse</button>
+        </div>
+
+        <div class="scan-actions">
+          <button class="button secondary" type="button" (click)="scanning ? stopCamera() : startCamera()">
+            {{ scanning ? 'Stop camera' : 'Scan with camera' }}
+          </button>
+          <label class="button secondary file-button">
+            Read QR image
+            <input type="file" accept="image/*" (change)="onQrImageSelected($event)">
+          </label>
+        </div>
+
+        <video #cameraVideo class="camera-preview" [class.visible]="scanning" playsinline muted></video>
+        <canvas #scanCanvas class="scan-canvas" aria-hidden="true"></canvas>
+
+        <div class="divider"><span>account details</span></div>
+
+        <form class="account-form" (ngSubmit)="addAccount()">
+          <div class="two-columns">
+            <div>
+              <label for="kind">Type</label>
+              <select id="kind" name="kind" [(ngModel)]="draft.kind">
+                <option value="totp">TOTP</option>
+                <option value="hotp">HOTP</option>
+              </select>
+            </div>
+            <div>
+              <label for="algorithm">Algorithm</label>
+              <select id="algorithm" name="algorithm" [(ngModel)]="draft.algorithm">
+                <option value="SHA1">SHA-1</option>
+                <option value="SHA256">SHA-256</option>
+                <option value="SHA512">SHA-512</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="issuer">Issuer</label>
+          <input id="issuer" name="issuer" type="text" maxlength="80" [(ngModel)]="draft.issuer" required>
+
+          <label for="account-name">Account name</label>
+          <input id="account-name" name="accountName" type="text" maxlength="120"
+            [(ngModel)]="draft.accountName" required>
+
+          <label for="secret">Base32 secret</label>
+          <input id="secret" name="secret" type="password" autocomplete="off" spellcheck="false"
+            [(ngModel)]="draft.secret" required>
+
+          <div class="three-columns">
+            <div>
+              <label for="digits">Digits</label>
+              <select id="digits" name="digits" [(ngModel)]="draft.digits">
+                <option [ngValue]="6">6</option>
+                <option [ngValue]="7">7</option>
+                <option [ngValue]="8">8</option>
+              </select>
+            </div>
+            @if (draft.kind === 'totp') {
+              <div>
+                <label for="period">Period</label>
+                <input id="period" name="period" type="number" min="1" max="300" [(ngModel)]="draft.period">
+              </div>
+            } @else {
+              <div>
+                <label for="counter">Counter</label>
+                <input id="counter" name="counter" type="number" min="0" [(ngModel)]="draft.counter">
+              </div>
+            }
+          </div>
+
+          <button class="button primary wide" type="submit">Save encrypted account</button>
+        </form>
+      </section>
+
+      <section class="panel backup-panel" aria-labelledby="backup-title">
+        <p class="eyebrow">Portable and encrypted</p>
+        <h2 id="backup-title">Backup &amp; restore</h2>
+        <p>The downloaded JSON contains ciphertext and the parameters needed to derive its key.</p>
+        <button class="button secondary wide" type="button" (click)="exportBackup()">Download backup</button>
+
+        <label for="restore-pin">Backup PIN</label>
+        <input id="restore-pin" name="restorePin" type="password" inputmode="numeric" autocomplete="off"
+          placeholder="6–12 digits" [(ngModel)]="restorePin">
+        <label class="button secondary wide file-button">
+          Restore backup file
+          <input type="file" accept="application/json,.json" (change)="restoreBackup($event)">
+        </label>
+        <p class="warning-copy">Restoring replaces the vault currently stored in this browser.</p>
+      </section>
+    </aside>
+  </div>
+</main>
+

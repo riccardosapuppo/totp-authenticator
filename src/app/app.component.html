@@ -1,0 +1,52 @@
+@if (initializing) {
+  <main class="centered-shell" aria-live="polite">
+    <div class="brand-mark" aria-hidden="true">C</div>
+    <p>Opening the local vault…</p>
+  </main>
+} @else if (vault.data()) {
+  <app-vault-dashboard (locked)="onLocked()" />
+} @else {
+  <main class="centered-shell">
+    <section class="unlock-card">
+      <div class="brand-mark" aria-hidden="true">C</div>
+      <p class="eyebrow">Local-first authenticator</p>
+      <h1>Cipher OTP</h1>
+      @if (vault.hasStoredVault()) {
+        <p class="lede">Enter your PIN to decrypt the vault stored in this browser.</p>
+      } @else {
+        <p class="lede">
+          Create a PIN for a new encrypted vault. Two clearly synthetic accounts will be added so the
+          TOTP and HOTP flows can be tried immediately.
+        </p>
+      }
+
+      <form (ngSubmit)="submitPin()">
+        <label for="pin">{{ vault.hasStoredVault() ? 'Vault PIN' : 'Create a PIN' }}</label>
+        <input id="pin" name="pin" type="password" inputmode="numeric" autocomplete="off"
+          pattern="[0-9]{6,12}" minlength="6" maxlength="12" [(ngModel)]="pin" required>
+
+        @if (!vault.hasStoredVault()) {
+          <label for="confirm-pin">Confirm PIN</label>
+          <input id="confirm-pin" name="confirmPin" type="password" inputmode="numeric"
+            autocomplete="off" pattern="[0-9]{6,12}" minlength="6" maxlength="12"
+            [(ngModel)]="confirmPin" required>
+        }
+
+        @if (error) {
+          <p class="message error" role="alert">{{ error }}</p>
+        }
+
+        <button class="primary-button" type="submit" [disabled]="busy">
+          {{ busy ? 'Working…' : vault.hasStoredVault() ? 'Unlock vault' : 'Create encrypted vault' }}
+        </button>
+      </form>
+
+      <div class="restore-divider"><span>or restore</span></div>
+      <label class="restore-button">
+        Select an encrypted backup
+        <input type="file" accept="application/json,.json" [disabled]="busy" (change)="restoreBackup($event)">
+      </label>
+      <p class="security-note">Your PIN and plaintext OTP secrets never leave this browser.</p>
+    </section>
+  </main>
+}
