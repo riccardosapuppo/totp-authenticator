@@ -1,6 +1,6 @@
-# Cipher OTP
+# TOTP Authenticator
 
-Cipher OTP is a small Angular authenticator that demonstrates standards-compliant TOTP and HOTP generation without sending secrets outside the browser. Its local vault is encrypted before it is written to IndexedDB, and encrypted JSON backups can be moved between browser profiles.
+TOTP Authenticator is a small Angular application that demonstrates standards-compliant TOTP and HOTP generation without sending secrets outside the browser. Its local vault is encrypted before it is written to IndexedDB, and encrypted JSON backups can be moved between browser profiles.
 
 The original was built for a client and lives in a private repository. This is an independent reimplementation, written from scratch with synthetic data.
 
@@ -49,7 +49,8 @@ The cryptographic and storage layers are independent of the Angular components. 
 Run these commands in order:
 
 ```powershell
-cd D:\personale\repo\totp-authenticator
+git clone https://github.com/riccardosapuppo/totp-authenticator.git
+cd totp-authenticator
 npm install
 npm start
 ```
@@ -71,7 +72,7 @@ npm run build
 
 ## Import accounts
 
-Cipher OTP accepts both TOTP and HOTP Key URI Format values:
+TOTP Authenticator accepts both TOTP and HOTP Key URI Format values:
 
 ```text
 otpauth://totp/Northstar%20Demo:demo%40example.test?secret=GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ&issuer=Northstar%20Demo

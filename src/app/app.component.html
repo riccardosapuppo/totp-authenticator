@@ -1,6 +1,6 @@
 @if (initializing) {
   <main class="centered-shell" aria-live="polite">
-    <div class="brand-mark" aria-hidden="true">C</div>
+    <div class="brand-mark" aria-hidden="true">T</div>
     <p>Opening the local vault…</p>
   </main>
 } @else if (vault.data()) {
@@ -8,9 +8,9 @@
 } @else {
   <main class="centered-shell">
     <section class="unlock-card">
-      <div class="brand-mark" aria-hidden="true">C</div>
+      <div class="brand-mark" aria-hidden="true">T</div>
       <p class="eyebrow">Local-first authenticator</p>
-      <h1>Cipher OTP</h1>
+      <h1>TOTP Authenticator</h1>
       @if (vault.hasStoredVault()) {
         <p class="lede">Enter your PIN to decrypt the vault stored in this browser.</p>
       } @else {

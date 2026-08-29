@@ -149,7 +149,7 @@ export class VaultService {
 
   async restoreEncryptedVault(value: unknown, pin: string): Promise<void> {
     if (!isEncryptedVault(value)) {
-      throw new Error('The selected file is not a Cipher OTP backup.');
+      throw new Error('The selected file is not a TOTP Authenticator backup.');
     }
     const vault = await decryptVault<unknown>(value, pin);
     if (!isVaultData(vault)) {

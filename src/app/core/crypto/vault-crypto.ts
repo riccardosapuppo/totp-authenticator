@@ -4,7 +4,7 @@ const MAXIMUM_ITERATIONS = 5_000_000;
 const BASE64_PATTERN = /^[A-Za-z0-9+/]+={0,2}$/;
 
 export interface EncryptedVault {
-  format: 'cipher-otp-vault';
+  format: 'totp-authenticator-vault';
   version: 1;
   kdf: {
     name: 'PBKDF2';
@@ -70,7 +70,7 @@ export function isEncryptedVault(value: unknown): value is EncryptedVault {
   }
   const candidate = value as Partial<EncryptedVault>;
   return (
-    candidate.format === 'cipher-otp-vault' &&
+    candidate.format === 'totp-authenticator-vault' &&
     candidate.version === 1 &&
     candidate.kdf?.name === 'PBKDF2' &&
     candidate.kdf.hash === 'SHA-256' &&
@@ -98,7 +98,7 @@ export async function encryptVault<T>(value: T, pin: string): Promise<EncryptedV
   const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, plaintext);
 
   return {
-    format: 'cipher-otp-vault',
+    format: 'totp-authenticator-vault',
     version: 1,
     kdf: {
       name: 'PBKDF2',

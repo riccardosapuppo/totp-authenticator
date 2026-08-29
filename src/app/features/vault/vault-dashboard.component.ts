@@ -185,7 +185,7 @@ export class VaultDashboardComponent implements OnInit, OnDestroy {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `cipher-otp-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      link.download = `totp-authenticator-backup-${new Date().toISOString().slice(0, 10)}.json`;
       link.click();
       URL.revokeObjectURL(url);
       this.notice = 'Encrypted backup created.';

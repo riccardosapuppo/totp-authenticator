@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { EncryptedVault } from '../crypto/vault-crypto';
 
-const DATABASE_NAME = 'cipher-otp';
+const DATABASE_NAME = 'totp-authenticator';
 const DATABASE_VERSION = 1;
 const STORE_NAME = 'vaults';
 const PRIMARY_VAULT_KEY = 'primary';
@@ -68,4 +68,3 @@ export class IndexedDbVaultRepository {
     await transactionComplete(transaction);
   }
 }
-
