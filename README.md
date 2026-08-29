@@ -50,7 +50,7 @@ The cryptographic and storage layers are independent of the Angular components. 
 
 Run these commands in order:
 
-```powershell
+```bash
 git clone https://github.com/riccardosapuppo/totp-authenticator.git
 cd totp-authenticator
 npm install
@@ -65,7 +65,7 @@ On first use, choose a numeric PIN containing 6–12 digits. The app creates an 
 
 After installing the dependencies:
 
-```powershell
+```bash
 npm test
 npm run build
 ```
