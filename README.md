@@ -4,6 +4,8 @@ TOTP Authenticator is a small Angular application that demonstrates standards-co
 
 The original was built for a client and lives in a private repository. This is an independent reimplementation, written from scratch with synthetic data.
 
+![TOTP Authenticator vault setup](docs/vault-setup.png)
+
 ## What it demonstrates
 
 - RFC 4226 HOTP and RFC 6238 TOTP implemented with the Web Crypto API.
