@@ -47,24 +47,27 @@ export class IndexedDbVaultRepository {
   async load(): Promise<EncryptedVault | null> {
     const database = await this.openDatabase();
     const transaction = database.transaction(STORE_NAME, 'readonly');
+    const completed = transactionComplete(transaction);
     const result = await requestResult(
       transaction.objectStore(STORE_NAME).get(PRIMARY_VAULT_KEY) as IDBRequest<EncryptedVault | undefined>,
     );
-    await transactionComplete(transaction);
+    await completed;
     return result ?? null;
   }
 
   async save(vault: EncryptedVault): Promise<void> {
     const database = await this.openDatabase();
     const transaction = database.transaction(STORE_NAME, 'readwrite');
+    const completed = transactionComplete(transaction);
     transaction.objectStore(STORE_NAME).put(vault, PRIMARY_VAULT_KEY);
-    await transactionComplete(transaction);
+    await completed;
   }
 
   async clear(): Promise<void> {
     const database = await this.openDatabase();
     const transaction = database.transaction(STORE_NAME, 'readwrite');
+    const completed = transactionComplete(transaction);
     transaction.objectStore(STORE_NAME).delete(PRIMARY_VAULT_KEY);
-    await transactionComplete(transaction);
+    await completed;
   }
 }
