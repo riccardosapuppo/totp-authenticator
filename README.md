@@ -45,6 +45,9 @@ The cryptographic and storage layers are independent of the Angular components. 
 - npm 10 or newer.
 - A current Chromium, Firefox or Safari browser with Web Crypto and IndexedDB support.
 - A camera is optional. Camera capture works on `localhost`; QR image import and manual entry work without it.
+- Chrome or Chromium specifically, to run the tests: `npm test` drives ChromeHeadless. The application itself runs in any of the three.
+
+Nothing else. No database, no container, no server of any kind and no account anywhere: the vault is encrypted in the browser and never leaves it.
 
 ## Run locally
 
