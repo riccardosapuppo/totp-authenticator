@@ -157,3 +157,12 @@ input:focus {
   background: rgb(255 125 145 / 12%);
   color: var(--danger);
 }
+
+/* Quiet on purpose: it belongs on the page, not in the way of it. */
+.colophon {
+  margin: 1.5rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+  opacity: 0.55;
+}

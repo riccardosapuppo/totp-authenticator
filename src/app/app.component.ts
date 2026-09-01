@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { VERSION } from './version';
 import { VaultService } from './core/vault/vault.service';
 import { VaultDashboardComponent } from './features/vault/vault-dashboard.component';
 
@@ -12,6 +13,17 @@ import { VaultDashboardComponent } from './features/vault/vault-dashboard.compon
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
+  /**
+   * What this is and who made it.
+   *
+   * Shown where a version belongs — under the card somebody looks at before
+   * they have unlocked anything. A test keeps it in step with package.json,
+   * because a version printed on screen that disagrees with the one published
+   * is worse than none.
+   */
+  readonly version = VERSION;
+  readonly author = 'Riccardo Sapuppo';
+
   pin = '';
   confirmPin = '';
   initializing = true;
