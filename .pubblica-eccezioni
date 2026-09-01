@@ -1,0 +1,17 @@
+# Riscontri veri che non sono segreti, e perché.
+#
+# Questo programma gestisce segreti OTP: "secret" è il vocabolario del suo
+# argomento, non un indizio che qualcuno ne abbia lasciato uno in giro. I
+# valori che il cancello trova sono i vettori di prova delle RFC 4226 e 6238
+# — "GEZDGNBVGY3TQOJQ" è la stringa "12345678901234567890" in base32, la
+# stessa che usa lo standard nei suoi esempi — e l'account dimostrativo che
+# l'applicazione crea da sola alla prima apertura.
+#
+# Nessuno di questi apre niente. Non vale per i nomi aziendali e per le chiavi
+# vere: quelli bloccano comunque, da qualunque file.
+
+README.md                                  # un otpauth:// di esempio, con il segreto delle RFC
+src/app/core/otp/*                         # vettori di prova delle RFC, e la variabile che tiene il segreto letto
+src/app/core/crypto/*                      # vettori di prova della cifratura del forziere
+src/app/core/vault/vault.service.ts        # l'account dimostrativo creato alla prima apertura
+src/app/features/vault/vault-dashboard.component.ts   # la variabile che normalizza il segreto digitato da chi usa il programma
