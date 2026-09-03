@@ -49,6 +49,19 @@ The cryptographic and storage layers are independent of the Angular components. 
 
 Nothing else. No database, no container, no server of any kind and no account anywhere: the vault is encrypted in the browser and never leaves it.
 
+**Measured, not estimated:** `npm install` writes **284 MB** into
+`node_modules` — an Angular toolchain is large — and that is the whole of the
+network cost. The application ships nothing at runtime: no font, no analytics,
+no request anywhere. Node **20.11** is the exact version continuous integration
+runs on, so the floor above is a fact rather than a claim.
+
+**To put the machine back:** delete `node_modules/` and the clone. Nothing is
+installed globally and nothing is registered. The vault lives in the browser's
+IndexedDB under `http://localhost:4200`, so clearing site data for that origin
+removes it — and the application unregisters any service worker left on that
+port by something else, since it is an origin shared with every project anybody
+has ever developed there.
+
 ## Run locally
 
 Run these commands in order:
