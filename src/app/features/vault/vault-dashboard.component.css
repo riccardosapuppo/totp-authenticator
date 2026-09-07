@@ -37,6 +37,9 @@ input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px r
 .two-columns, .three-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }.three-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .backup-panel { margin-top: 0; }.backup-panel .file-button { margin-top: .55rem; }.warning-copy { margin: .75rem 0 0; color: var(--danger) !important; font-size: .7rem; }
 .message { margin: 0 0 1rem; padding: .8rem 1rem; border: 1px solid; border-radius: .75rem; }.notice { border-color: rgb(101 230 180 / 35%); background: rgb(101 230 180 / 9%); color: var(--accent); }.error { border-color: rgb(255 125 145 / 35%); background: rgb(255 125 145 / 9%); color: var(--danger); }
+/* Under the content, at the weight of a caption: somebody who opens this from a
+   link never sees the README, so the page carries the provenance itself. */
+.origin { max-width: 62rem; margin: 2.25rem 0 0; padding-top: 1.1rem; border-top: 1px solid var(--border); color: var(--muted); font-size: .75rem; line-height: 1.55; }
 @media (max-width: 60rem) { .workspace-grid { grid-template-columns: 1fr; }.tools-column { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 42rem) { .local-badge { display: none; }.hero { align-items: start; flex-direction: column; }.account-count { display: flex; gap: .4rem; align-items: baseline; }.code-list, .tools-column { grid-template-columns: 1fr; }.standard-label { display: none; }.scan-actions { align-items: stretch; flex-direction: column; }.code-value { font-size: 1.75rem; } }
 

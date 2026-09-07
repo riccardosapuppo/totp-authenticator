@@ -158,6 +158,17 @@ input:focus {
   color: var(--danger);
 }
 
+/* Where the demonstration comes from. Same quiet weight as the colophon:
+   somebody opening this from a link never sees the README, so the page says
+   it — under the card, not across the top of it. */
+.origin {
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: 0.74rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
 /* Quiet on purpose: it belongs on the page, not in the way of it. */
 .colophon {
   margin: 1.5rem 0 0;

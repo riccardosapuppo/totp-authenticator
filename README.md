@@ -2,8 +2,6 @@
 
 TOTP Authenticator is a small Angular application that demonstrates standards-compliant TOTP and HOTP generation without sending secrets outside the browser. Its local vault is encrypted before it is written to IndexedDB, and encrypted JSON backups can be moved between browser profiles.
 
-The original was built for a client and lives in a private repository. This is an independent reimplementation, written from scratch with synthetic data.
-
 ![TOTP Authenticator vault setup](docs/vault-setup.png)
 
 ## What it demonstrates
@@ -117,6 +115,19 @@ This repository demonstrates sound browser-side primitives, but it is not a secu
 - There is no cloud or multi-device synchronisation service.
 
 The QR decoder is the MIT-licensed [`jsQR`](https://github.com/cozmo/jsQR) dependency. OTP generation, URI parsing, encryption and persistence in this repository are independent TypeScript implementations.
+
+## Production reconstruction
+
+This repository is an independent reconstruction of a production system I
+designed and developed.
+
+Confidentiality and intellectual property constraints mean the original cannot
+be published. It was rebuilt from scratch so it could be shown and run,
+preserving the core architecture, workflows and technical challenges of the
+production solution, with newly written code and fictional data.
+
+No proprietary source code, confidential data or client assets from the
+original system are included in this repository.
 
 ## License
 

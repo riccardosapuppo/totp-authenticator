@@ -47,6 +47,10 @@
         <input type="file" accept="application/json,.json" [disabled]="busy" (change)="restoreBackup($event)">
       </label>
       <p class="security-note">Your PIN and plaintext OTP secrets never leave this browser.</p>
+      <p class="origin">
+        A demonstration — an independent reconstruction of a production system I
+        designed and developed.
+      </p>
       <p class="colophon">Version {{ version }} — developed by {{ author }}</p>
     </section>
   </main>
