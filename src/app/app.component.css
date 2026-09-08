@@ -169,11 +169,31 @@ input:focus {
   text-align: center;
 }
 
-/* Quiet on purpose: it belongs on the page, not in the way of it. */
+/* Quiet on purpose: it belongs on the page, not in the way of it. The dimming
+   is a muted colour rather than opacity, because opacity would fade the link
+   inside it too and a link nobody can read is not a link. */
 .colophon {
   margin: 1.5rem 0 0;
+  color: var(--muted);
   font-size: 0.75rem;
   letter-spacing: 0.02em;
   text-align: center;
-  opacity: 0.55;
+}
+
+/* The one link on this card. It borrows the accent the buttons and the eyebrow
+   already use, so it reads as something to click without shouting. */
+.colophon a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.colophon a:hover {
+  color: var(--text);
+}
+
+.colophon a:focus-visible {
+  border-radius: 0.2rem;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
