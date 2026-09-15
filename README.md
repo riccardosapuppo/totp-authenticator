@@ -71,7 +71,14 @@ npm install
 npm start
 ```
 
-`npm start` is the single startup command. It runs one Angular development-server process and opens no external service. Visit [http://localhost:4200](http://localhost:4200).
+`npm start` is the single startup command. It builds, serves, and **opens the
+page**, so there is nothing to copy out of a terminal: one development-server
+process on [http://localhost:4200](http://localhost:4200), and no external
+service of any kind.
+
+It used to print the address and wait. A URL in a terminal is a URL somebody
+has to notice, select and paste, and that tax is charged in the first ten
+seconds — before whoever ran it has decided whether it is worth their time.
 
 On first use, choose a numeric PIN containing 6–12 digits. The app creates an encrypted local vault and loads the two synthetic accounts. Click a displayed code to copy it.
 
