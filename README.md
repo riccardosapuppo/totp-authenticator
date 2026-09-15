@@ -2,7 +2,23 @@
 
 TOTP Authenticator is a small Angular application that demonstrates standards-compliant TOTP and HOTP generation without sending secrets outside the browser. Its local vault is encrypted before it is written to IndexedDB, and encrypted JSON backups can be moved between browser profiles.
 
-![TOTP Authenticator vault setup](docs/vault-setup.png)
+`npm start` builds, serves and opens the page. On first use you choose a PIN;
+the vault is created with two synthetic accounts so both flows can be tried
+straight away.
+
+![Creating the vault: a PIN, and the note that the PIN and the plaintext secrets never leave this browser](docs/vault-setup.png)
+
+Behind it is the part worth looking at — a TOTP code with its countdown and an
+HOTP counter you advance yourself, side by side, generated in the browser from
+a vault that was decrypted in memory:
+
+![The vault: a TOTP account counting down beside an HOTP account with its counter, and the panels for adding an account and for encrypted backup](docs/vault.png)
+
+Deleting an account asks first, and the question is the application's own
+rather than the browser's: it says which account, what is lost, and the button
+that does it says **Delete it** instead of **OK**.
+
+![The confirmation: "Delete Northstar Demo?", with the detail that without a backup it cannot be recovered, and buttons reading Keep it and Delete it](docs/asking.png)
 
 ## What it demonstrates
 
