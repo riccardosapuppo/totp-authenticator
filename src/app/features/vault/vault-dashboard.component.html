@@ -30,6 +30,16 @@
   }
 
   <div class="workspace-grid">
+    <!--
+        Il backup sta qui e non nella colonna degli strumenti.
+
+        Con due account -- lo stato in cui la demo viene guardata -- la colonna
+        di sinistra finiva a meta' pagina e quella di destra continuava per un
+        altro schermo: il pannello del backup era sotto "Import or enter", cioe'
+        a due scorrimenti da qualunque cosa. Spostato qui le due colonne si
+        pareggiano, e "aggiungi un account" resta da solo dove lo si cerca.
+    -->
+    <div class="codes-stack">
     <section class="codes-column" aria-labelledby="codes-title">
       <div class="section-heading">
         <div>
@@ -80,6 +90,23 @@
         </article>
       </div>
     </section>
+
+    <section class="panel backup-panel" aria-labelledby="backup-title">
+      <p class="eyebrow">Portable and encrypted</p>
+      <h2 id="backup-title">Backup &amp; restore</h2>
+      <p>The downloaded JSON contains ciphertext and the parameters needed to derive its key.</p>
+      <button class="button secondary wide" type="button" (click)="exportBackup()">Download backup</button>
+
+      <label for="restore-pin">Backup PIN</label>
+      <input id="restore-pin" name="restorePin" type="password" inputmode="numeric" autocomplete="off"
+        placeholder="6–12 digits" [(ngModel)]="restorePin">
+      <label class="button secondary wide file-button">
+        Restore backup file
+        <input type="file" accept="application/json,.json" (change)="restoreBackup($event)">
+      </label>
+      <p class="warning-copy">Restoring replaces the vault currently stored in this browser.</p>
+    </section>
+    </div>
 
     <aside class="tools-column">
       <section class="panel" aria-labelledby="import-title">
@@ -164,21 +191,6 @@
         </form>
       </section>
 
-      <section class="panel backup-panel" aria-labelledby="backup-title">
-        <p class="eyebrow">Portable and encrypted</p>
-        <h2 id="backup-title">Backup &amp; restore</h2>
-        <p>The downloaded JSON contains ciphertext and the parameters needed to derive its key.</p>
-        <button class="button secondary wide" type="button" (click)="exportBackup()">Download backup</button>
-
-        <label for="restore-pin">Backup PIN</label>
-        <input id="restore-pin" name="restorePin" type="password" inputmode="numeric" autocomplete="off"
-          placeholder="6–12 digits" [(ngModel)]="restorePin">
-        <label class="button secondary wide file-button">
-          Restore backup file
-          <input type="file" accept="application/json,.json" (change)="restoreBackup($event)">
-        </label>
-        <p class="warning-copy">Restoring replaces the vault currently stored in this browser.</p>
-      </section>
     </aside>
   </div>
 

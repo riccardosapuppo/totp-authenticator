@@ -3,6 +3,7 @@ import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChi
 import { FormsModule } from '@angular/forms';
 import jsQR from 'jsqr';
 
+import { AskingService } from '../../core/asking/asking.service';
 import { NewOtpAccount, OtpAccount } from '../../core/models/otp-account';
 import { decodeBase32, normalizeBase32 } from '../../core/otp/base32';
 import { formatOtp, generateHotp, generateTotp } from '../../core/otp/otp';
@@ -47,7 +48,10 @@ export class VaultDashboardComponent implements OnInit, OnDestroy {
   private animationFrame?: number;
   private cameraStream?: MediaStream;
 
-  constructor(readonly vault: VaultService) {}
+  constructor(
+    readonly vault: VaultService,
+    private readonly asking: AskingService,
+  ) {}
 
   ngOnInit(): void {
     void this.refreshCodes();
@@ -166,7 +170,14 @@ export class VaultDashboardComponent implements OnInit, OnDestroy {
   }
 
   async deleteAccount(account: OtpAccount): Promise<void> {
-    if (!window.confirm(`Delete the account “${account.issuer}”?`)) return;
+    const gone = await this.asking.for({
+      heading: `Delete ${account.issuer}?`,
+      detail: 'Its secret is removed from this browser. Without a backup it cannot be recovered.',
+      confirm: 'Delete it',
+      destroys: true,
+    });
+
+    if (!gone) return;
     this.clearMessages();
     try {
       await this.vault.deleteAccount(account.id);
@@ -208,7 +219,14 @@ export class VaultDashboardComponent implements OnInit, OnDestroy {
       this.error = 'Enter the 6–12 digit PIN used by the backup first.';
       return;
     }
-    if (!window.confirm('Replace the vault currently stored in this browser?')) return;
+    const replace = await this.asking.for({
+      heading: 'Replace the vault in this browser?',
+      detail: 'The accounts stored here are dropped and the ones in the backup take their place.',
+      confirm: 'Replace it',
+      destroys: true,
+    });
+
+    if (!replace) return;
     try {
       const value = JSON.parse(await file.text()) as unknown;
       await this.vault.restoreEncryptedVault(value, this.restorePin);

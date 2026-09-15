@@ -1,0 +1,148 @@
+/*
+    The question, in the application's own colours.
+
+    It borrows the panels' surface, border and radius rather than inventing a
+    third look: a dialog that does not belong to the page it interrupts is the
+    thing this replaced.
+*/
+
+.asking {
+  width: min(26rem, calc(100% - 2rem));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  background: var(--surface-raised);
+  color: var(--text);
+  box-shadow: 0 2rem 5rem rgb(0 0 0 / 45%);
+
+  /* The arrival. display and overlay are named, or the dialog is taken off the
+     screen before the fade has anywhere to happen. */
+  opacity: 0;
+  transform: translateY(0.5rem) scale(0.985);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1),
+    overlay 0.18s ease allow-discrete,
+    display 0.18s ease allow-discrete;
+}
+
+.asking[open] {
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .asking[open] {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.985);
+  }
+}
+
+.asking::backdrop {
+  background: rgb(4 8 18 / 0%);
+  backdrop-filter: blur(0);
+  transition:
+    background 0.18s ease,
+    backdrop-filter 0.18s ease,
+    overlay 0.18s ease allow-discrete,
+    display 0.18s ease allow-discrete;
+}
+
+.asking[open]::backdrop {
+  background: rgb(4 8 18 / 62%);
+  backdrop-filter: blur(3px);
+}
+
+@starting-style {
+  .asking[open]::backdrop {
+    background: rgb(4 8 18 / 0%);
+    backdrop-filter: blur(0);
+  }
+}
+
+.asking-sheet {
+  padding: 1.5rem;
+}
+
+.asking h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.asking p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.asking-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+/*
+    :where(), perche' la regola generica non deve vincere su quelle che
+    nominano un bottone.
+
+    Scritta `.asking-buttons button` valeva (0,1,1) e batteva `.asking-yes`
+    (0,1,0): i due bottoni restavano trasparenti e quello che cancella non era
+    rosso. Misurato, non guardato -- a occhio sembrava solo un po' pallido.
+    E' lo stesso incidente di cascata gia' corretto altrove in questo
+    portfolio, il che e' il motivo per cui questa volta l'ho cercato.
+*/
+.asking-buttons :where(button) {
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.asking-no:hover {
+  background: rgb(255 255 255 / 6%);
+}
+
+/*
+    The one that does the thing is the one that says what it does. Never "OK"
+    beside "Cancel": two words that name nothing, in an order a reader has to
+    work out, with the destructive one wearing the colour of the safe choice.
+*/
+.asking-yes {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #07130e;
+}
+
+.asking-yes:hover {
+  filter: brightness(1.07);
+}
+
+.asking-destroys {
+  border-color: #ff6b81;
+  background: #ff6b81;
+  color: #2a0710;
+}
+
+.asking-buttons :where(button):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Asked for, and meant: it still arrives, it simply arrives at once. */
+@media (prefers-reduced-motion: reduce) {
+  .asking,
+  .asking::backdrop {
+    transition: none;
+  }
+
+  .asking {
+    transform: none;
+  }
+}

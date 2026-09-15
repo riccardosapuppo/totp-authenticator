@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { VERSION } from './version';
+import { AskingComponent } from './core/asking/asking.component';
+import { AskingService } from './core/asking/asking.service';
 import { VaultService } from './core/vault/vault.service';
 import { VaultDashboardComponent } from './features/vault/vault-dashboard.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule, VaultDashboardComponent],
+  imports: [AskingComponent, FormsModule, VaultDashboardComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -30,7 +32,10 @@ export class AppComponent implements OnInit {
   busy = false;
   error = '';
 
-  constructor(readonly vault: VaultService) {}
+  constructor(
+    readonly vault: VaultService,
+    private readonly asking: AskingService,
+  ) {}
 
   async ngOnInit(): Promise<void> {
     try {
@@ -75,7 +80,17 @@ export class AppComponent implements OnInit {
       this.error = 'Backup files larger than 10 MB are not accepted.';
       return;
     }
-    if (this.vault.hasStoredVault() && !window.confirm('Replace the vault stored in this browser?')) return;
+    if (
+      this.vault.hasStoredVault() &&
+      !(await this.asking.for({
+        heading: 'Replace the vault in this browser?',
+        detail: 'The accounts stored here are dropped and the ones in the backup take their place.',
+        confirm: 'Replace it',
+        destroys: true,
+      }))
+    ) {
+      return;
+    }
 
     this.busy = true;
     try {
